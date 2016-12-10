@@ -9,7 +9,7 @@
         android:text="Phone Usage Timer:"
         android:id="@+id/textViewPhoneUsageTitle"
         android:layout_gravity="center_horizontal"
-        android:textSize="40dp"
+        android:textSize="35dp"
         android:layout_marginTop="50dp"
         android:layout_marginBottom="35dp" />
 
@@ -19,5 +19,36 @@
         android:text="%s"
         android:id="@+id/textViewPhoneUsageTimer"
         android:layout_gravity="center_horizontal"
-        android:textSize="50dp" />
+        android:textSize="35dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Accelerometer: "
+        android:id="@+id/textViewAccelerometer"
+        android:textSize="35dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Off"
+        android:id="@+id/textViewAccelerometerOnOff"
+        android:layout_gravity="right"
+        android:textSize="35dp"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Light Sensor: "
+        android:id="@+id/textViewLightSensor"
+        android:textSize="35dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Off"
+        android:id="@+id/textViewLightSensorOnOff"
+        android:layout_gravity="right"
+        android:textSize="35dp" />
+
 </LinearLayout>
