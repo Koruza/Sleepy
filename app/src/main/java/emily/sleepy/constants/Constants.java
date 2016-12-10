@@ -29,10 +29,7 @@ public class Constants {
      * Unique IDs associated with each service notification.
      */
     public interface NOTIFICATION_ID {
-        int ACCELEROMETER_SERVICE = 101;
-        int PPG_SERVICE = 102;
-        int LOCATION_SERVICE = 103;
-        int AUDIO_SERVICE = 104;
+        int LIGHT_SENSOR_SERVICE = 101;
     }
 
     /** Keys to identify key-value data sent to/from the sensor service */
@@ -58,16 +55,9 @@ public class Constants {
      * Messages sent to the main UI to update the status. These must be unique values.
      */
     public interface MESSAGE {
-        int ACCELEROMETER_SERVICE_STARTED = 0;
-        int ACCELEROMETER_SERVICE_STOPPED = 1;
-        int LOCATION_SERVICE_STARTED = 2;
-        int LOCATION_SERVICE_STOPPED = 3;
-        int AUDIO_SERVICE_STARTED = 4;
-        int AUDIO_SERVICE_STOPPED = 5;
-        int PPG_SERVICE_STARTED = 6;
-        int PPG_SERVICE_STOPPED = 7;
-        int BAND_SERVICE_STARTED = 8;
-        int BAND_SERVICE_STOPPED = 9;
+        int LIGHTSENSOR_SERVICE_STARTED = 0;
+        int LIGHTSENSOR_SERVICE_STOPPED = 1;
+
     }
 
     /** Error/warning messages displayed to the user TODO: put into string resources */
@@ -99,9 +89,6 @@ public class Constants {
      * </pre>
      */
     public interface MHLClientFilter {
-        String STEP_DETECTED = "SENSOR_STEP";
-        String ACTIVITY_DETECTED = "ACTIVITY_DETECTED";
-        String SPEAKER_DETECTED = "SPEAKER_DETECTED";
-        String CLUSTER = "CLUSTER";
+        String LIGHT_SENSOR = "LIGHT_SENSOR";
     }
 }
