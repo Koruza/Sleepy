@@ -5,22 +5,15 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Build;
-import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Locale;
 
-import android.content.BroadcastReceiver;
-import android.content.IntentFilter;
-import android.content.Context;
 import edu.umass.cs.MHLClient.client.MessageReceiver;
 import edu.umass.cs.MHLClient.client.MobileIOClient;
-import edu.umass.cs.MHLClient.sensors.AccelerometerReading;
 import edu.umass.cs.MHLClient.sensors.SensorReading;
 import emily.sleepy.R;
 import emily.sleepy.constants.Constants;
@@ -85,13 +78,15 @@ public class LightSensorService extends SensorService implements SensorEventList
     public void onSensorChanged(SensorEvent event) {
         if(event.sensor.getType() == Sensor.TYPE_LIGHT){
             // Perform actions on light sensor data
-            float x = event.values[0];
-            float y = event.values[1];
-            float z = event.values[2];
-            Log.d(TAG, "X: " + x);
-            Log.d(TAG, "Y: " + y);
-            Log.d(TAG, "Z: " + z);
-            Log.d(TAG, "Light sensor data received");
+            float reading = event.values[1];
+//            Log.d(TAG, "Reading: " + reading);
+//            Log.d(TAG, "Light sensor data received");
+
+            // Hardcoding label
+            int label = 1; 
+            LightSensorReading lightSensorReading = new LightSensorReading(mUserID, "MOBILE", "", System.currentTimeMillis(), label, reading);
+
+            mClient.sendSensorReading(lightSensorReading);
         }else {
             // cannot identify sensor type
             Log.w(TAG, Constants.ERROR_MESSAGES.WARNING_SENSOR_NOT_SUPPORTED);
