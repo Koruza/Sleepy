@@ -16,4 +16,5 @@ public class History {
     public static List<Session> getInstance(){
         return history;
     }
+
 }

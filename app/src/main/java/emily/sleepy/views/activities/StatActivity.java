@@ -79,7 +79,7 @@ public class StatActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // Testing historyActivity
-        history.add(new Session(1000, 1000, 5000));
+//        history.add(new Session(1000, 1000, 5000));
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stat);

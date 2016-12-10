@@ -57,9 +57,9 @@ def predict(window):
     # print class_names[int(labbie[0])-1]
     # print " ---------------------------------------------------------- "
     if class_names[int(labbie[0])-1] == "light":
-        sensor = onSleepDetected(timestamp, 1)
-    else:
         sensor = onSleepDetected(timestamp, 0)
+    else:
+        sensor = onSleepDetected(timestamp, 1)
     print class_names[int(labbie[0])-1]
     return sensor
     # print "in predict"
