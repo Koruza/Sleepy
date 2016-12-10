@@ -4,6 +4,7 @@ import android.app.ActivityManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
 
 import emily.sleepy.constants.Constants;
 
@@ -41,6 +42,7 @@ public class ServiceManager {
      * @see SensorService
      */
     public void startSensorService(Class<? extends SensorService> serviceClass){
+        Log.d(TAG, "startSensorService");
         Intent startServiceIntent = new Intent(context, serviceClass);
         startServiceIntent.setAction(Constants.ACTION.START_SERVICE);
         context.startService(startServiceIntent);
@@ -52,6 +54,7 @@ public class ServiceManager {
      * @see SensorService
      */
     public void stopSensorService(Class<? extends SensorService> serviceClass){
+        Log.d(TAG, "stopSensorService");
         Intent startServiceIntent = new Intent(context, serviceClass);
         startServiceIntent.setAction(Constants.ACTION.STOP_SERVICE);
         context.startService(startServiceIntent);

@@ -111,6 +111,7 @@ public abstract class SensorService extends Service implements ConnectionStateHa
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null){
+            Log.d(TAG, "SensorService.onStartCommand(): intent is not null");
             if (intent.getAction().equals(Constants.ACTION.START_SERVICE)) {
                 start();
             } else if (intent.getAction().equals(Constants.ACTION.STOP_SERVICE)) {

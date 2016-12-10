@@ -46,12 +46,21 @@ public class LightSensorService extends SensorService implements SensorEventList
 
     @Override
     protected void onServiceStarted() {
+        Log.d(TAG, "light sensor service started");
         broadcastMessage(Constants.MESSAGE.LIGHTSENSOR_SERVICE_STARTED);
     }
 
     @Override
     protected void onServiceStopped() {
+        Log.d(TAG, "light sensor service stopped");
         broadcastMessage(Constants.MESSAGE.LIGHTSENSOR_SERVICE_STOPPED);
+    }
+
+    @Override
+    public int onStartCommand(Intent intent, int flags, int startId){
+        super.onStartCommand(intent, flags, startId);
+        Log.d(TAG, "light sensor service onStartCommand");
+        return START_STICKY;
     }
 
     @Override
@@ -76,6 +85,13 @@ public class LightSensorService extends SensorService implements SensorEventList
     public void onSensorChanged(SensorEvent event) {
         if(event.sensor.getType() == Sensor.TYPE_LIGHT){
             // Perform actions on light sensor data
+            float x = event.values[0];
+            float y = event.values[1];
+            float z = event.values[2];
+            Log.d(TAG, "X: " + x);
+            Log.d(TAG, "Y: " + y);
+            Log.d(TAG, "Z: " + z);
+            Log.d(TAG, "Light sensor data received");
         }else {
             // cannot identify sensor type
             Log.w(TAG, Constants.ERROR_MESSAGES.WARNING_SENSOR_NOT_SUPPORTED);

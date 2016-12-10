@@ -10,16 +10,6 @@ public class Constants {
     public interface ACTION {
         String BROADCAST_MESSAGE = "edu.umass.cs.my-activities-toolkit.action.broadcast-message";
         String BROADCAST_STATUS = "edu.umass.cs.my-activities-toolkit.action.broadcast-status";
-        String BROADCAST_SPECTROGRAM = "edu.umass.cs.my-activities-toolkit.action.broadcast-spectrogram";
-        String BROADCAST_ACCELEROMETER_DATA = "edu.umass.cs.my-activities-toolkit.action.broadcast-accelerometer-data";
-        String BROADCAST_ANDROID_STEP_COUNT = "edu.umass.cs.my-activities-toolkit.action.broadcast-android-step-count";
-        String BROADCAST_LOCAL_STEP_COUNT = "edu.umass.cs.my-activities-toolkit.action.broadcast-local-step-count";
-        String BROADCAST_ACTIVITY = "edu.umass.cs.my-activities-toolkit.action.broadcast-activity";
-        String BROADCAST_PPG = "edu.umass.cs.my-activities-toolkit.action.broadcast-ppg";
-        String BROADCAST_PPG_PEAK = "edu.umass.cs.my-activities-toolkit.action.broadcast-ppg-peak";
-        String BROADCAST_ACCELEROMETER_PEAK = "edu.umass.cs.my-activities-toolkit.action.broadcast-accelerometer-peak";
-        String BROADCAST_HEART_RATE = "edu.umass.cs.my-activities-toolkit.action.broadcast-heart-rate";
-        String BROADCAST_SPEAKER_NAME = "edu.umass.cs.my-activities-toolkit.action.broadcast-speaker-name";
         String START_SERVICE = "edu.umass.cs.my-activities-toolkit.action.start-service";
         String STOP_SERVICE = "edu.umass.cs.my-activities-toolkit.action.stop-service";
         String NAVIGATE_TO_APP = "edu.umass.cs.my-activities-toolkit.action.navigate-to-app";
