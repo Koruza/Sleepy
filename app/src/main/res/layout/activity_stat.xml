@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:weightSum="1">
 
     <TextView
         android:layout_width="wrap_content"
@@ -24,31 +25,23 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Accelerometer: "
-        android:id="@+id/textViewAccelerometer"
-        android:textSize="35dp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Off"
-        android:id="@+id/textViewAccelerometerOnOff"
-        android:layout_gravity="right"
-        android:textSize="35dp"/>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="Light Sensor: "
         android:id="@+id/textViewLightSensor"
         android:textSize="35dp" />
 
-    <TextView
-        android:layout_width="wrap_content"
+    <Switch
+        android:layout_width="73dp"
         android:layout_height="wrap_content"
-        android:text="Off"
-        android:id="@+id/textViewLightSensorOnOff"
-        android:layout_gravity="right"
-        android:textSize="35dp" />
+        android:id="@+id/switch1"
+        android:checked="false"
+        android:layout_weight="0.31"
+        android:layout_gravity="right" />
+
+    <ImageView
+        android:layout_width="216dp"
+        android:layout_height="200dp"
+        android:id="@+id/BrownPic"
+        android:src="@mipmap/brown_phone"
+        android:layout_gravity="center_horizontal" />
 
 </LinearLayout>
