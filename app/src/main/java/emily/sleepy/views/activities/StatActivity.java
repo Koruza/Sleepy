@@ -1,7 +1,10 @@
 package emily.sleepy.views.activities;
 
 import android.content.SharedPreferences;
+import android.icu.text.SimpleDateFormat;
+import android.icu.util.Calendar;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,6 +24,10 @@ public class StatActivity extends AppCompatActivity {
     TextView phoneUsageTimer;
     Switch switchLightSensor;
     ServiceManager mServiceManager;
+    private long AppOpenTime = 0L;
+    private long StartTime = System.currentTimeMillis();
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +38,25 @@ public class StatActivity extends AppCompatActivity {
 //        TextView t = (TextView) findViewById(R.id.textViewPhoneUsageTimer);
 //        t.setText(String.format(Locale.getDefault(),"Hi"));
         phoneUsageTimer =(TextView) findViewById(R.id.textViewPhoneUsageTimer);
-        phoneUsageTimer.setText(String.format(Locale.getDefault(),"Hi"));
+        final Handler handler = new Handler();
+        final Runnable r = new Runnable() {
+            public void run() {
+                String text ="";
+                long currentTime = System.currentTimeMillis();
+                handler.postDelayed(this, 1000);
+                long timeDifference = (currentTime - StartTime);
+                String hours = Long.toString((timeDifference/(1000*60*60))%24);
+                String minutes = Long.toString((timeDifference/(1000*60))%60);
+                String sec = Long.toString((timeDifference/(1000))%60);
+//                SimpleDateFormat eTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
+//                String timeElapsed = Long.toString();
+//                String mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                phoneUsageTimer.setText(hours + ":" + minutes + ":" + sec);
+            }
+        };
+        handler.postDelayed(r, 0000);
+
+//        phoneUsageTimer.setText(String.format(Locale.getDefault(),"Hi"));
 
         this.mServiceManager = ServiceManager.getInstance(this);
 
