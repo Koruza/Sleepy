@@ -10,7 +10,7 @@ from sklearn.ensemble import RandomForestClassifier # random forest classifier
 from sklearn.neighbors import NearestNeighbors # k-nearest neighbors (k-NN) classiifer
 from sklearn.svm import SVC #SVM classifier
 
-from features import FeatureExtractor
+from USleepfeatures import extract_features
 from sklearn import cross_validation
 from sklearn.metrics import confusion_matrix
 import pickle
@@ -32,8 +32,7 @@ if not os.path.exists(output_dir):
 
 class_names = [] # the set of classes, i.e. speakers
 
-data = np.zeros((0))
-
+data = np.zeros((0,3))
 for filename in os.listdir(data_dir):
     if filename.endswith("data.csv"):
         filename_components = filename.split("-") # split by the '-' character
@@ -47,6 +46,7 @@ for filename in os.listdir(data_dir):
         print("Loaded {} raw labelled audio data samples.".format(len(data_for_current_speaker)))
         sys.stdout.flush()
         data = np.append(data, data_for_current_speaker, axis=0)
+        print data
 
 print("Found data for {} speakers : {}".format(len(class_names), ", ".join(class_names)))
 
@@ -58,7 +58,7 @@ print("Found data for {} speakers : {}".format(len(class_names), ", ".join(class
 
 # You may need to change n_features depending on how you compute your features
 # we have it set to 3 to match the dummy values we return in the starter code.
-n_features = 1038
+n_features = 3
 
 print("Extracting features and labels for {} audio windows...".format(data.shape[0]))
 sys.stdout.flush()
@@ -66,13 +66,11 @@ sys.stdout.flush()
 X = np.zeros((0,n_features))
 y = np.zeros(0,)
 
-# change debug to True to show print statements we've included:
-feature_extractor = FeatureExtractor(debug=False)
 
 for i,window_with_timestamp_and_label in enumerate(data):
     window = window_with_timestamp_and_label[1:-1] # get window without timestamp/label
     label = data[i,-1] # get label
-    x = feature_extractor.extract_features(window)  # extract features
+    x = extract_features(window)  # extract features
 
     # if # of features don't match, we'll tell you!
     if (len(x) != X.shape[1]):
@@ -95,14 +93,14 @@ sys.stdout.flush()
 n = len(y)
 n_classes = len(class_names)
 
-totalPrec =[0,0,0,0]
-totalRecall = [0,0,0,0]
+totalPrec =[0,0]
+totalRecall = [0,0]
 totalAcc = 0
 
 # TODO: Train your classifier!
 cv = cross_validation.KFold(n, n_folds=10, shuffle=True, random_state=None)
 
-tree = DecisionTreeClassifier(criterion ="entropy",max_depth=10,max_features=10)
+tree = DecisionTreeClassifier(criterion ="entropy",max_depth=3,max_features=3)
 
 for i, (train_indexes, test_indexes) in enumerate(cv):
     X_train = X[train_indexes, :]
