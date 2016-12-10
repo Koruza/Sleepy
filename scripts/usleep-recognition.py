@@ -40,7 +40,7 @@ def onSleepDetected(timestamp, sleep):
     """
     print("Sleeper is {}.".format(sleep))
     sys.stdout.flush()
-    send_socket.send(json.dumps({'user_id' : user_id, 'sensor_type' : 'SENSOR_SERVER_MESSAGE', 'message' : 'SPEAKER_DETECTED', 'data': {'timestamp': timestamp ,'isSleep': sleep }}) + "\n")
+    send_socket.send(json.dumps({'user_id' : user_id, 'sensor_type' : 'SENSOR_SERVER_MESSAGE', 'message' : 'LIGHT_SENSOR', 'data': {'timestamp': timestamp ,'isSleep': sleep }}) + "\n")
 
 def predict(window):
     # print window
@@ -53,6 +53,8 @@ def predict(window):
     # sleepy = onSleepDetected(class_names[int(labbie[0])])
     # print class_names[int(labbie[0])]
     # return sleepy
+	print "in predict"
+	onSleepDetected(1000, 1);
     return 1
     
 
@@ -139,7 +141,7 @@ try:
                     continue
                 previous_json = '' # reset if all were successful
                 sensor_type = data['sensor_type']
-                if (sensor_type == u"SENSOR_AUDIO"):
+                if (sensor_type == u"SENSOR_LIGHT"):
                     t=data['data']['t'] # timestamp isn't used
                     audio_buffer=data['data']['values']
                     print("Received audio data of length {}".format(len(audio_buffer)))

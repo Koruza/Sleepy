@@ -55,7 +55,7 @@ public class StatActivity extends AppCompatActivity {
 //        boolean isScreenOn = pm.isScreenOn();
         if(isSleep != 0 && isScreenOn){ // The user is using his/her phone before sleep
             // continue timer
-            continueClock = true; 
+            continueClock = true;
         }else{
             // stop timer
 //            mHandler.removeCallbacks(r);
