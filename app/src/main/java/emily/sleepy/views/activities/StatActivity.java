@@ -43,6 +43,7 @@ public class StatActivity extends AppCompatActivity {
 
     private void processIsSleep(int isSleep){
         boolean isScreenOn = pm.isInteractive();
+//        boolean isScreenOn = pm.isScreenOn();
         if(isSleep != 0 && isScreenOn){ // The user is using his/her phone before sleep
             // continue timer
         }else{
