@@ -14,7 +14,7 @@ public class LightSensorReading extends SensorReading {
 
     public LightSensorReading(String userID, String deviceType, String deviceID, long t, int label, float reading){
         super(userID, deviceType, deviceID, "SENSOR_LIGHT", t, label);
-        this.reading = reading;
+        this.reading = (double) reading;
     }
 
     @Override

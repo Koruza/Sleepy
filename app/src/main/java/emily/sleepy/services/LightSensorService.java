@@ -66,7 +66,8 @@ public class LightSensorService extends SensorService implements SensorEventList
                 try {
                     JSONObject data = json.getJSONObject("data");
                     long timestamp = data.getLong("timestamp");
-                    Log.d(TAG, "Light Sensor updated at " + timestamp + ".");
+                    double reading = data.getDouble("reading");
+                    Log.d(TAG, "Light Sensor updated at " + timestamp + " and the reading is " + reading);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -83,7 +84,7 @@ public class LightSensorService extends SensorService implements SensorEventList
 //            Log.d(TAG, "Light sensor data received");
 
             // Hardcoding label
-            int label = 1; 
+            int label = 1;
             LightSensorReading lightSensorReading = new LightSensorReading(mUserID, "MOBILE", "", System.currentTimeMillis(), label, reading);
 
             mClient.sendSensorReading(lightSensorReading);
