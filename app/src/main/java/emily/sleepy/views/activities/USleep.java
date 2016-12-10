@@ -49,12 +49,8 @@ public class USleep extends AppCompatActivity {
 
         MyTimerTask myTask = new MyTimerTask();
         Timer myTimer = new Timer();
-//
-//        myTimer.schedule(myTask, 5000, 1500);
 
-
-        myTimer.schedule(myTask, 0, 900000);
-//        myTimer.schedule(myTask,0,19800);
+//        myTimer.schedule(myTask, 0, 900000);
 
         imgButton =(ImageButton)findViewById(R.id.startSleepButton);
         imgButton.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +71,6 @@ public class USleep extends AppCompatActivity {
     }
 
     private void generateNotification(Context context, String message) {
-
         int icon = R.mipmap.ic_launcher;
         long when = System.currentTimeMillis();
         String appname = "USleep";
@@ -85,7 +80,6 @@ public class USleep extends AppCompatActivity {
         Notification notification;
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
                 new Intent(context, USleep.class), 0);
-
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
             notification = builder.setContentIntent(contentIntent)
@@ -100,9 +94,6 @@ public class USleep extends AppCompatActivity {
                     .build();
 
             notificationManager.notify((int) when, notification);
-
-
-
     }
 }
 //    @Override
