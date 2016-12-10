@@ -8,6 +8,7 @@ import numpy as np
 import pickle
 import os
 from USleepfeatures import extract_features
+import time
 
 # TODO: Replace the string with your user ID
 user_id = "b9.49.29.1f.91.78.ea.3d.e9.35"
@@ -43,6 +44,8 @@ def onSleepDetected(timestamp, sleep):
 
 def predict(window):
     class_names = ["light","dark"]
+    timestamp = long(time.time())
+    print timestamp
     # print window
     x = extract_features(window)
     features = np.zeros((0,3))
@@ -54,9 +57,9 @@ def predict(window):
     # print class_names[int(labbie[0])-1]
     # print " ---------------------------------------------------------- "
     if class_names[int(labbie[0])-1] == "light":
-        sensor = onSleepDetected(1000, 1)
+        sensor = onSleepDetected(timestamp, 1)
     else:
-        sensor = onSleepDetected(1000, 0)
+        sensor = onSleepDetected(timestamp, 0)
     print class_names[int(labbie[0])-1]
     return sensor
     # print "in predict"
