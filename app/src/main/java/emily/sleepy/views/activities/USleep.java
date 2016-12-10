@@ -80,7 +80,6 @@ public class USleep extends AppCompatActivity {
                     .setContentTitle(appname)
                     .setContentText(message)
                     .setSubText("Turn off your phone (╯°□°）╯︵ ┻━┻")
-                    .setColor(Color.BLUE)
                     .build();
 
             notificationManager.notify((int) when, notification);
