@@ -39,8 +39,19 @@ public class USleep extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_usleep);
 
+        imgButton =(ImageButton)findViewById(R.id.startSleepButton);
+        imgButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(USleep.this, StatActivity.class));
+            }
+        });
+
         MyTimerTask myTask = new MyTimerTask();
         Timer myTimer = new Timer();
+//
+//        myTimer.schedule(myTask, 5000, 1500);
+
 
         myTimer.schedule(myTask, 0, 900000);
 //        myTimer.schedule(myTask,0,19800);
@@ -52,6 +63,7 @@ public class USleep extends AppCompatActivity {
                 startActivity(new Intent(USleep.this, StatActivity.class));
             }
         });
+
 
     }
 

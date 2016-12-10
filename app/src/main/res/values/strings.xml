@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Sleepy</string>
+
     <string name="title_activity_stat">StatActivity</string>
+
+    <string name="light_sensor_service_notification">Collecting Light Sensor Data</string>
 </resources>
