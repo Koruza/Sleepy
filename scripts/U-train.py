@@ -3,11 +3,14 @@
 import os
 import sys
 import numpy as np
-import matplotlib.pyplot as plt
-from sklearn.tree import DecisionTreeClassifier, export_graphviz
-from sklearn import svm
-from USleepfeatures import extract_features # make sure features.py is in the same directory
-from util import slidingWindow, reorient, reset_vars
+
+# The following are classifiers you may be interested in using:
+from sklearn.tree import DecisionTreeClassifier # decision tree classifier
+from sklearn.ensemble import RandomForestClassifier # random forest classifier
+from sklearn.neighbors import NearestNeighbors # k-nearest neighbors (k-NN) classiifer
+from sklearn.svm import SVC #SVM classifier
+
+from features import FeatureExtractor
 from sklearn import cross_validation
 from sklearn.metrics import confusion_matrix
 import pickle
@@ -19,26 +22,33 @@ import pickle
 #
 # -----------------------------------------------------------------------------
 
-print("Loading data...")
-sys.stdout.flush()
-data_file = os.path.join('data', 'all-data.csv')
-data = np.genfromtxt(data_file, delimiter=',')
-print("Loaded {} raw labelled activity data samples.".format(len(data)))
-sys.stdout.flush()
+data_dir = 'data' # directory where the data files are stored
 
-# %%---------------------------------------------------------------------------
-#
-#		                    Pre-processing
-#
-# -----------------------------------------------------------------------------
+output_dir = 'training_output' # directory where the classifier(s) are stored
 
-print("Reorienting accelerometer data...")
-sys.stdout.flush()
-reset_vars()
-reoriented = np.asarray([reorient(data[i,1], data[i,2], data[i,3]) for i in range(len(data))])
-reoriented_data_with_timestamps = np.append(data[:,0:1],reoriented,axis=1)
-data = np.append(reoriented_data_with_timestamps, data[:,-1:], axis=1)
+if not os.path.exists(output_dir):
+    os.mkdir(output_dir)
 
+
+class_names = [] # the set of classes, i.e. speakers
+
+data = np.zeros((0))
+
+for filename in os.listdir(data_dir):
+    if filename.endswith("data.csv"):
+        filename_components = filename.split("-") # split by the '-' character
+        light = filename_components[0]
+        print("Loading data for {}.".format(light))
+        if light not in class_names:
+            class_names.append(light)
+        sys.stdout.flush()
+        data_file = os.path.join('data', filename)
+        data_for_current_speaker = np.genfromtxt(data_file, delimiter=',')
+        print("Loaded {} raw labelled audio data samples.".format(len(data_for_current_speaker)))
+        sys.stdout.flush()
+        data = np.append(data, data_for_current_speaker, axis=0)
+
+print("Found data for {} speakers : {}".format(len(class_names), ", ".join(class_names)))
 
 # %%---------------------------------------------------------------------------
 #
@@ -46,62 +56,35 @@ data = np.append(reoriented_data_with_timestamps, data[:,-1:], axis=1)
 #
 # -----------------------------------------------------------------------------
 
-# you may want to play around with the window and step sizes
-window_size = 20
-step_size = 20
+# You may need to change n_features depending on how you compute your features
+# we have it set to 3 to match the dummy values we return in the starter code.
+n_features = 1038
 
-# sampling rate for the sample data should be about 25 Hz; take a brief window to confirm this
-n_samples = 1000
-time_elapsed_seconds = (data[n_samples,0] - data[0,0]) / 1000
-sampling_rate = n_samples / time_elapsed_seconds
-
-feature_names = ["std", "mean", "median"]
-class_names = ["InBed","Awake"]
-
-print("Extracting features and labels for window size {} and step size {}...".format(window_size, step_size))
+print("Extracting features and labels for {} audio windows...".format(data.shape[0]))
 sys.stdout.flush()
-
-n_features = len(feature_names)
 
 X = np.zeros((0,n_features))
 y = np.zeros(0,)
 
-for i,window_with_timestamp_and_label in slidingWindow(data, window_size, step_size):
-    # omit timestamp and label from accelerometer window for feature extraction:
-    window = window_with_timestamp_and_label[:,1:-1]
-    # extract features over window:
-    x = extract_features(window)
-    # append features:
+# change debug to True to show print statements we've included:
+feature_extractor = FeatureExtractor(debug=False)
+
+for i,window_with_timestamp_and_label in enumerate(data):
+    window = window_with_timestamp_and_label[1:-1] # get window without timestamp/label
+    label = data[i,-1] # get label
+    x = feature_extractor.extract_features(window)  # extract features
+
+    # if # of features don't match, we'll tell you!
+    if (len(x) != X.shape[1]):
+        print("Received feature vector of length {}. Expected feature vector of length {}.".format(len(x), X.shape[1]))
+
     X = np.append(X, np.reshape(x, (1,-1)), axis=0)
-    # append label:
-    y = np.append(y, window_with_timestamp_and_label[10, -1])
+    y = np.append(y, label)
 
 print("Finished feature extraction over {} windows".format(len(X)))
 print("Unique labels found: {}".format(set(y)))
 sys.stdout.flush()
 
-# %%---------------------------------------------------------------------------
-#
-#		                    Plot data points
-#
-# -----------------------------------------------------------------------------
-
-# We provided you with an example of plotting two features.
-# We plotted the mean X acceleration against the mean Y acceleration.
-# It should be clear from the plot that these two features are alone very uninformative.
-print("Plotting data points...")
-sys.stdout.flush()
-plt.figure()
-formats = ['bo', 'go']
-for i in range(0,len(y),10): # only plot 1/10th of the points, it's a lot of data!
-    # Graph 1: std_magnitude vs medianZ
-    # plt.plot(X[i,0], X[i,3], formats[int(y[i])])
-    # Graph 2: meanX vs stdX
-    plt.plot(X[i,0], X[i,1], formats[int(y[i])])
-    # Graph 3: mean_magnitude vs meanCrossingZ
-    # plt.plot(X[i,10], X[i,13], formats[int(y[i])])
-
-plt.show()
 
 # %%---------------------------------------------------------------------------
 #
@@ -112,15 +95,14 @@ plt.show()
 n = len(y)
 n_classes = len(class_names)
 
-totalPrec =[0,0]
-totalRecall = [0,0]
+totalPrec =[0,0,0,0]
+totalRecall = [0,0,0,0]
 totalAcc = 0
 
-# TODO: Train and evaluate your decision tree classifier over 10-fold CV.
-# Report average accuracy, precision and recall metrics.
+# TODO: Train your classifier!
 cv = cross_validation.KFold(n, n_folds=10, shuffle=True, random_state=None)
 
-tree = DecisionTreeClassifier(criterion ="entropy",max_depth=3,max_features=3)
+tree = DecisionTreeClassifier(criterion ="entropy",max_depth=10,max_features=10)
 
 for i, (train_indexes, test_indexes) in enumerate(cv):
     X_train = X[train_indexes, :]
@@ -160,6 +142,7 @@ for i, (train_indexes, test_indexes) in enumerate(cv):
     print("\n")
 
 
+
 # TODO: Output the average accuracy, precision and recall over the 10 folds
     print "Accuracy: ",acc
     print "Precision: ",prec
@@ -173,10 +156,11 @@ print "Avg Precision: ", [x / 10 for x in totalPrec]
 print "Avg Recall: ", [x / 10 for x in totalRecall]
 tree.fit(X, y)
 
-# export_graphviz(tree, out_file='tree.dot', feature_names = feature_names)
-
-# when ready, set this to the best model you found, trained on all the data:
+# TODO: set your best classifier below, then uncomment the following line to train it on ALL the data:
 best_classifier = tree
+# best_classifier.fit(X,y)
 
-with open('classifier.pickle', 'wb') as f: # 'wb' stands for 'write bytes'
+classifier_filename='classifier.pickle'
+print("Saving best classifier to {}...".format(os.path.join(output_dir, classifier_filename)))
+with open(os.path.join(output_dir, classifier_filename), 'wb') as f: # 'wb' stands for 'write bytes'
     pickle.dump(best_classifier, f)
