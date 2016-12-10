@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.IntentService;
 import android.app.Notification;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.app.NotificationCompat;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 
+import java.util.Locale;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -45,11 +47,22 @@ public class USleep extends AppCompatActivity {
             }
         });
 
-//        MyTimerTask myTask = new MyTimerTask();
-//        Timer myTimer = new Timer();
+        MyTimerTask myTask = new MyTimerTask();
+        Timer myTimer = new Timer();
 //
 //        myTimer.schedule(myTask, 5000, 1500);
 
+
+        myTimer.schedule(myTask, 0, 900000);
+//        myTimer.schedule(myTask,0,19800);
+
+        imgButton =(ImageButton)findViewById(R.id.startSleepButton);
+        imgButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(USleep.this, StatActivity.class));
+            }
+        });
 
 
     }
@@ -57,7 +70,7 @@ public class USleep extends AppCompatActivity {
     class MyTimerTask extends TimerTask {
         public void run() {
 
-            generateNotification(getApplicationContext(), "Hello");
+            generateNotification(getBaseContext(), "Your phone needs to sleep too!");
         }
     }
 
@@ -65,7 +78,7 @@ public class USleep extends AppCompatActivity {
 
         int icon = R.mipmap.ic_launcher;
         long when = System.currentTimeMillis();
-        String appname = context.getResources().getString(R.string.app_name);
+        String appname = "USleep";
         NotificationManager notificationManager = (NotificationManager) context
                 .getSystemService(Context.NOTIFICATION_SERVICE);
         int currentapiVersion = android.os.Build.VERSION.SDK_INT;
@@ -73,25 +86,18 @@ public class USleep extends AppCompatActivity {
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0,
                 new Intent(context, USleep.class), 0);
 
-        // To support 2.3 os, we use "Notification" class and 3.0+ os will use
-        // "NotificationCompat.Builder" class.
 
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                    context);
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
             notification = builder.setContentIntent(contentIntent)
-                    .setSmallIcon(icon).setTicker(appname).setWhen(0)
-                    .setAutoCancel(true).setContentTitle(appname)
-                    .setContentText(message).build();
-//        builder.setAutoCancel(false);
-//        builder.setTicker("this is ticker text");
-//        builder.setContentTitle("WhatsApp Notification");
-//        builder.setContentText("You have a new message");
-//        builder.setSmallIcon(R.drawable.ic_launcher);
-//        builder.setContentIntent(pendingIntent);
-//        builder.setOngoing(true);
-//        builder.setSubText("This is subtext...");   //API level 16
-//        builder.setNumber(100);
-//        builder.build();
+                    .setSmallIcon(icon)
+                    .setTicker(appname)
+                    .setWhen(when)
+                    .setAutoCancel(true)
+                    .setContentTitle(appname)
+                    .setContentText(message)
+                    .setSubText("Turn off your phone (╯°□°）╯︵ ┻━┻")
+                    .setColor(Color.BLUE)
+                    .build();
 
             notificationManager.notify((int) when, notification);
 
