@@ -20,6 +20,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -31,17 +32,19 @@ import emily.sleepy.R;
 import emily.sleepy.constants.Constants;
 import emily.sleepy.services.LightSensorService;
 import emily.sleepy.services.ServiceManager;
+import emily.sleepy.util.History;
 import emily.sleepy.util.Session;
 
 public class StatActivity extends AppCompatActivity {
     private static final String TAG = StatActivity.class.getName();
     TextView phoneUsageTimer;
     Switch switchLightSensor;
+    Button historyButton;
     ServiceManager mServiceManager;
     private long AppOpenTime = 0L;
     private long StartTime;
     PowerManager pm;
-    List<Session> history = new ArrayList<Session>();
+    List<Session> history = History.getInstance();
 
     private Handler mHandler;
     private Runnable r;
@@ -75,14 +78,22 @@ public class StatActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // Testing historyActivity
+        history.add(new Session(1000, 1000, 5000));
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stat);
 
         phoneUsageTimer =(TextView) findViewById(R.id.textViewPhoneUsageTimer);
+        historyButton = (Button) findViewById(R.id.buttonHistory);
+        historyButton.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                startActivity(new Intent(StatActivity.this, HistoryActivity.class));
+            }
+        });
 
         // Timer
         mHandler = new Handler();
-
         r = new Runnable() {
 
             public long tick(){
@@ -105,7 +116,7 @@ public class StatActivity extends AppCompatActivity {
 
                 // Generating Notification every 5 seconds (for demo)
                 int period = 5;
-                if((AppOpenTime / 1000 ) % period == 0){
+                if(AppOpenTime > 0 && (AppOpenTime / 1000 ) % period == 0){
                     generateNotification(StatActivity.this, "Your phone needs to sleep too!");
                 }
             }
