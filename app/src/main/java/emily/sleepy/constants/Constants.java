@@ -8,11 +8,12 @@ public class Constants {
     /** Intent actions used to communicate between the main UI and the sensor service
      * @see android.content.Intent */
     public interface ACTION {
-        String BROADCAST_MESSAGE = "edu.umass.cs.my-activities-toolkit.action.broadcast-message";
-        String BROADCAST_STATUS = "edu.umass.cs.my-activities-toolkit.action.broadcast-status";
-        String START_SERVICE = "edu.umass.cs.my-activities-toolkit.action.start-service";
-        String STOP_SERVICE = "edu.umass.cs.my-activities-toolkit.action.stop-service";
-        String NAVIGATE_TO_APP = "edu.umass.cs.my-activities-toolkit.action.navigate-to-app";
+        String BROADCAST_MESSAGE = "emily.sleepy.action.broadcast-message";
+        String BROADCAST_STATUS = "emily.sleepy.action.broadcast-status";
+        String START_SERVICE = "emily.sleepy.action.start-service";
+        String STOP_SERVICE = "emily.sleepy.action.stop-service";
+        String NAVIGATE_TO_APP = "emily.sleepy.action.navigate-to-app";
+        String BROADCAST_IS_SLEEP = "emily.sleepy.action.is-sleep";
     }
 
     /**
@@ -24,21 +25,11 @@ public class Constants {
 
     /** Keys to identify key-value data sent to/from the sensor service */
     public interface KEY {
-        String SPECTROGRAM = "edu.umass.cs.my-activities-toolkit.key.spectrogram";
-        String ACTIVITY = "edu.umass.cs.my-activities-toolkit.key.activity";
-        String MESSAGE = "edu.umass.cs.my-activities-toolkit.key.message";
-        String STATUS = "edu.umass.cs.my-activities-toolkit.key.status";
-        String ACCELEROMETER_DATA = "edu.umass.cs.my-activities-toolkit.key.accelerometer-data";
-        String TIMESTAMP = "edu.umass.cs.my-activities-toolkit.key.ppg-timestamp";
-        String PPG_DATA = "edu.umass.cs.my-activities-toolkit.key.ppg-value";
-        String HEART_RATE = "edu.umass.cs.my-activities-toolkit.key.heart-rate";
-        String STEP_COUNT = "edu.umass.cs.my-activities-toolkit.key.step-count";
-        String SPEAKER_NAME = "edu.umass.cs.my-activities-toolkit.key.speaker-name";
-        String PPG_PEAK_TIMESTAMP = "edu.umass.cs.my-activities-toolkit.key.ppg-peak-timestamp";
-        String PPG_PEAK_VALUE = "edu.umass.cs.my-activities-toolkit.key.ppg-peak-value";
-        String ACCELEROMETER_PEAK_TIMESTAMP = "edu.umass.cs.my-activities-toolkit.key.accelerometer-peak-timestamp";
-        String ACCELEROMETER_PEAK_VALUE = "edu.umass.cs.my-activities-toolkit.key.accelerometer-peak-value";
-        String NOTIFICATION_ID = "edu.umass.cs.my-activities-toolkit.key.sensor-service-type";
+        String MESSAGE = "emily.sleepy.key.message";
+        String STATUS = "emily.sleepy.key.status";
+        String TIMESTAMP = "emily.sleepy.key.ppg-timestamp";
+        String IS_SLEEP = "emily.sleepy.key.is-sleep";
+        String NOTIFICATION_ID = "emily.sleepy.key.sensor-service-type";
     }
 
     /**

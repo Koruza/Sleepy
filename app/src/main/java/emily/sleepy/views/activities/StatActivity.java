@@ -1,8 +1,14 @@
 package emily.sleepy.views.activities;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.preference.PreferenceManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -10,9 +16,8 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
-import java.util.Locale;
-
 import emily.sleepy.R;
+import emily.sleepy.constants.Constants;
 import emily.sleepy.services.LightSensorService;
 import emily.sleepy.services.ServiceManager;
 
@@ -21,19 +26,39 @@ public class StatActivity extends AppCompatActivity {
     TextView phoneUsageTimer;
     Switch switchLightSensor;
     ServiceManager mServiceManager;
+    PowerManager pm;
+
+    // BroadcastReceiver for receiving intents
+    private final BroadcastReceiver receiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction() != null) {
+                if (intent.getAction().equals(Constants.ACTION.BROADCAST_IS_SLEEP)) {
+                    int isSleep = intent.getIntExtra(Constants.KEY.IS_SLEEP, -1);
+                    StatActivity.this.processIsSleep(isSleep);
+                }
+            }
+        }
+    };
+
+    private void processIsSleep(int isSleep){
+        boolean isScreenOn = pm.isInteractive();
+        if(isSleep != 0 && isScreenOn){ // The user is using his/her phone before sleep
+            // continue timer
+        }else{
+            // stop timer
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stat);
 
-//        phoneUsageTimer =(TextView) findViewById(R.id.textViewPhoneUsageTimer);
-//        TextView t = (TextView) findViewById(R.id.textViewPhoneUsageTimer);
-//        t.setText(String.format(Locale.getDefault(),"Hi"));
         phoneUsageTimer =(TextView) findViewById(R.id.textViewPhoneUsageTimer);
-        phoneUsageTimer.setText(String.format(Locale.getDefault(),"Hi"));
 
         this.mServiceManager = ServiceManager.getInstance(this);
+        pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
 
         //obtain references to the on/off light sensor switches and handle the toggling appropriately
         Log.d(TAG, "Before light sensor segment of code");
@@ -51,6 +76,17 @@ public class StatActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // Setting intent filter to filter intent from various services
+        LocalBroadcastManager broadcastManager = LocalBroadcastManager.getInstance(this);
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(Constants.ACTION.BROADCAST_IS_SLEEP);
+        broadcastManager.registerReceiver(receiver, filter);
     }
 
 }

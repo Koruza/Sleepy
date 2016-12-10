@@ -5,6 +5,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.support.v4.content.LocalBroadcastManager;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -66,8 +67,21 @@ public class LightSensorService extends SensorService implements SensorEventList
                 try {
                     JSONObject data = json.getJSONObject("data");
                     long timestamp = data.getLong("timestamp");
-                    double reading = data.getDouble("reading");
-                    Log.d(TAG, "Light Sensor updated at " + timestamp + " and the reading is " + reading);
+//                    double reading = data.getDouble("reading");
+//                    Log.d(TAG, "Light Sensor updated at " + timestamp + " and the reading is " + reading);
+                    int isSleep = data.getInt("isSleep");
+                    Log.d(TAG, "Light Sensor updated at " + timestamp + " and isSleep is " + isSleep);
+                    broadcastIsSleep(timestamp, isSleep);
+                    /*
+                    * if(isSleep)
+                    *   if(timer is not running)
+                    *       continue timer;
+                    *       send broadcast to statactivity to continue timer
+                    * else
+                    *   if(timer is running)
+                    *       stop timer
+                    *       send broadcast to statactivity to stop timer;
+                    * */
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -127,5 +141,14 @@ public class LightSensorService extends SensorService implements SensorEventList
     @Override
     protected int getNotificationIconResourceID() {
         return R.drawable.panda;
+    }
+
+    public void broadcastIsSleep(final long timestamp, final int isSleep) {
+        Intent intent = new Intent();
+        intent.putExtra(Constants.KEY.TIMESTAMP, timestamp);
+        intent.putExtra(Constants.KEY.IS_SLEEP, isSleep);
+        intent.setAction(Constants.ACTION.BROADCAST_IS_SLEEP);
+        LocalBroadcastManager manager = LocalBroadcastManager.getInstance(this);
+        manager.sendBroadcast(intent);
     }
 }
