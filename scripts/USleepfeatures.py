@@ -26,6 +26,7 @@ def _compute_std_features(window):
 
 def extract_features(window):
     # print window
+    
     x = []
     x = np.append(x, _compute_std_features(window))
     x = np.append(x,  _compute_mean_features(window))

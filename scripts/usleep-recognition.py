@@ -7,6 +7,7 @@ import threading
 import numpy as np
 import pickle
 import os
+from USleepfeatures import extract_features
 
 # TODO: Replace the string with your user ID
 user_id = "b9.49.29.1f.91.78.ea.3d.e9.35"
@@ -32,8 +33,6 @@ if classifier == None:
     print("Classifier is null; make sure you have trained it!")
     sys.exit()
 
-feature_extractor = FeatureExtractor(debug=False)
-
 def onSleepDetected(timestamp, sleep):
     """
     Notifies the client of the current speaker
@@ -43,19 +42,26 @@ def onSleepDetected(timestamp, sleep):
     send_socket.send(json.dumps({'user_id' : user_id, 'sensor_type' : 'SENSOR_SERVER_MESSAGE', 'message' : 'LIGHT_SENSOR', 'data': {'timestamp': timestamp ,'isSleep': sleep }}) + "\n")
 
 def predict(window):
+    class_names = ["light","dark"]
     # print window
-    # class_names = [0,1]
-
-    # x = feature_extractor.extract_features(window)
-    # features = np.zeros(1)
-    # features = np.append(features, np.reshape(x, (1,-1)), axis=0)
-    # labbie = classifier.predict(features)
-    # sleepy = onSleepDetected(class_names[int(labbie[0])])
-    # print class_names[int(labbie[0])]
-    # return sleepy
-    print "in predict"
-    onSleepDetected(1000, 1)
-    return 1
+    x = extract_features(window)
+    features = np.zeros((0,3))
+    features = np.append(features, np.reshape(x, (1,-1)), axis=0)
+    labbie = classifier.predict(features)
+    # print "----------------------------------------------------------"
+    # print x
+    # print labbie
+    # print class_names[int(labbie[0])-1]
+    # print " ---------------------------------------------------------- "
+    if class_names[int(labbie[0])-1] == "light":
+        sensor = onSleepDetected(1000, 1)
+    else:
+        sensor = onSleepDetected(1000, 0)
+    print class_names[int(labbie[0])-1]
+    return sensor
+    # print "in predict"
+    # onSleepDetected(1000, 1)
+    # return 1
 
 #################   Server Connection Code  ####################
 
@@ -142,7 +148,11 @@ try:
                 sensor_type = data['sensor_type']
                 if (sensor_type == u"SENSOR_LIGHT"):
                     t=data['data']['t'] # timestamp isn't used
-                    audio_buffer=data['data']['reading']
+                    audio_buffer=[data['data']['reading']]
+                    # print audio_buffer
+                    # print t
+                    # audio_buffer = np.append(audio_buffer,t,axis = 1)
+                    # print audio_buffer
                     # print("Received audio data of length {}".format(len(audio_buffer)))
                     t = threading.Thread(target=predict, args=(np.asarray(audio_buffer),))
                     t.start()
