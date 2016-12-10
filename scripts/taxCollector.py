@@ -11,10 +11,10 @@ user_id = "b9.49.29.1f.91.78.ea.3d.e9.35"
 
 # TODO: Change the filename of the output file.
 # You should keep it in the format "speaker-data-<speaker>-#.csv"
-filename="light-data.csv"
+filename="dark-data.csv"
 
 # TODO: Change the label to match the speaker; it must be numeric
-label = 1
+label = 2
 
 data_dir = "data"
 
@@ -111,14 +111,17 @@ try:
                 sensor_type = data['sensor_type']
                 if (sensor_type == u"SENSOR_LIGHT"):
                     print ":p"
+                    print data
                     t = data['data']['t']
                     print "o:"
                     audio_buffer=data['data']['reading']
+                    print "*********************************************************"
+                    print audio_buffer
                     print("Received audio data")   
                     print t                 
                     labelled_instance = [t]
                     print ":3"
-                    # labelled_instance.extend(audio_buffer)
+                    labelled_instance.append(audio_buffer)
                     print "D:<"
                     labelled_instance.append(label)
                     print "Hi"
