@@ -33,6 +33,10 @@ public class StatActivity extends AppCompatActivity {
     private long StartTime = System.currentTimeMillis();
     PowerManager pm;
 
+    private Handler mHandler;
+    private Runnable r;
+    private boolean continueClock = false;
+
     // BroadcastReceiver for receiving intents
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
         @Override
@@ -51,8 +55,11 @@ public class StatActivity extends AppCompatActivity {
 //        boolean isScreenOn = pm.isScreenOn();
         if(isSleep != 0 && isScreenOn){ // The user is using his/her phone before sleep
             // continue timer
+            continueClock = true; 
         }else{
             // stop timer
+//            mHandler.removeCallbacks(r);
+            continueClock = false;
         }
     }
 
@@ -62,25 +69,35 @@ public class StatActivity extends AppCompatActivity {
         setContentView(R.layout.activity_stat);
 
         phoneUsageTimer =(TextView) findViewById(R.id.textViewPhoneUsageTimer);
-        final Handler handler = new Handler();
-        final Runnable r = new Runnable() {
+
+        // Timer
+        mHandler = new Handler();
+
+        r = new Runnable() {
+
+            public long tick(){
+                return 1000L;
+            }
+
             public void run() {
                 String text ="";
                 long currentTime = System.currentTimeMillis();
-                handler.postDelayed(this, 1000);
+                mHandler.postDelayed(this, 1000);
                 long timeDifference = (currentTime - StartTime);
-                String hours = Long.toString((timeDifference/(1000*60*60))%24);
-                String minutes = Long.toString((timeDifference/(1000*60))%60);
-                String sec = Long.toString((timeDifference/(1000))%60);
-//                SimpleDateFormat eTime = new SimpleDateFormat("HH:mm:ss", Locale.getDefault());
-//                String timeElapsed = Long.toString();
-//                String mydate = java.text.DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime());
+                if(StatActivity.this.continueClock){
+                    AppOpenTime += tick();
+                }
+
+                String hours = Long.toString((AppOpenTime/(1000*60*60))%24);
+                String minutes = Long.toString((AppOpenTime/(1000*60))%60);
+                String sec = Long.toString((AppOpenTime/(1000))%60);
                 phoneUsageTimer.setText(hours + ":" + minutes + ":" + sec);
             }
         };
-        handler.postDelayed(r, 0000);
+        mHandler.postDelayed(r, 0000);
 
-//        phoneUsageTimer.setText(String.format(Locale.getDefault(),"Hi"));
+
+//        mHandler.removeCallbacks(r);
 
         this.mServiceManager = ServiceManager.getInstance(this);
         pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
