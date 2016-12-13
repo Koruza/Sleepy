@@ -11,10 +11,10 @@ user_id = "b9.49.29.1f.91.78.ea.3d.e9.35"
 
 # TODO: Change the filename of the output file.
 # You should keep it in the format "speaker-data-<speaker>-#.csv"
-filename="dark-data.csv"
+filename="poop-data.csv"
 
 # TODO: Change the label to match the speaker; it must be numeric
-label = 2
+label = 1
 
 data_dir = "data"
 
